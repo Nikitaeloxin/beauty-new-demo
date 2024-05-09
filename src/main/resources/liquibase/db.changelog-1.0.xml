@@ -1,0 +1,301 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+	<changeSet id="1.0.0" author="nikita.elokhin">
+		<createTable tableName="customers">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="email" type="VARCHAR(255)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			
+			<column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+			<column name="password" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+		</createTable>
+	</changeSet>
+	
+	
+	<changeSet id="1.0.1" author="nikita.elokhin">
+		<createTable tableName="saloons">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="email" type="VARCHAR(255)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			
+			<column name="saloon_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="rate" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+			<column name="password" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+		</createTable>
+	</changeSet>
+	
+	
+	<changeSet id="1.0.2" author="nikita.elokhin">
+		<createTable tableName="beauty_services">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="service_name" type="VARCHAR(255)">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="service_description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="rate" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="saloon_id" type="BIGINT">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="1.0.3" author="nikita.elokhin">
+		<addForeignKeyConstraint baseColumnNames="saloon_id"
+			baseTableName="beauty_services"
+			constraintName="fk_saloon_beauty_services"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="saloons" />
+	</changeSet>
+	
+	
+	<changeSet id="1.0.4" author="nikita.elokhin">
+		<createTable tableName="appointments">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="time" type="DATETIME">
+				<constraints nullable="false" />
+			</column>
+			
+            <column name="customer_id" type="BIGINT">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="saloon_id" type="BIGINT">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="service_id" type="BIGINT">
+				<constraints nullable="false"/>
+			</column>
+			
+			<column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+		</createTable>
+	</changeSet>
+	
+	
+	<changeSet id="1.0.5" author="nikita.elokhin">
+		<addForeignKeyConstraint baseColumnNames="customer_id"
+			baseTableName="appointments"
+			constraintName="fk_customer_appointments"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="customers" />
+	</changeSet>
+	
+	
+	<changeSet id="1.0.6" author="nikita.elokhin">
+		<addForeignKeyConstraint baseColumnNames="saloon_id"
+			baseTableName="appointments"
+			constraintName="fk_saloon_appointments"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="saloons" />
+	</changeSet>
+	
+	<changeSet id="1.0.7" author="nikita.elokhin">
+		<addForeignKeyConstraint baseColumnNames="service_id"
+			baseTableName="appointments"
+			constraintName="fk_service_appointments"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="beauty_services" />
+	</changeSet>
+	
+	
+	<changeSet id="1.0.8" author="nikita.elokhin">
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    
+    <changeSet id="1.0.9" author="nikita.elokhin">
+        <createTable tableName="customer_roles">
+            <column name="customer_id" type="BIGINT">
+            </column>
+
+            <column name="role_id" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+    
+    
+    <changeSet id="1.0.10" author="nikita.elokhin">
+        <addForeignKeyConstraint baseColumnNames="customer_id"
+                                 baseTableName="customer_roles"
+                                 constraintName="fk_customer_roles_customer"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="customers"/>
+    </changeSet>
+
+    <changeSet id="1.0.11" author="nikita.elokhin">
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="customer_roles"
+                                 constraintName="fk_customer_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+    
+    
+    <changeSet id="1.0.12" author="nikita.elokhin">
+        <createTable tableName="saloon_roles">
+            <column name="saloon_id" type="BIGINT">
+            </column>
+
+            <column name="role_id" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+    
+    
+    <changeSet id="1.0.13" author="nikita.elokhin">
+        <addForeignKeyConstraint baseColumnNames="saloon_id"
+                                 baseTableName="saloon_roles"
+                                 constraintName="fk_saloon_roles_saloon"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="saloons"/>
+    </changeSet>
+
+    <changeSet id="1.0.14" author="nikita.elokhin">
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="saloon_roles"
+                                 constraintName="fk_saloon_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+    
+    <changeSet id="1.1.0" author="nikita.elokhin">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+	
+</databaseChangeLog>
