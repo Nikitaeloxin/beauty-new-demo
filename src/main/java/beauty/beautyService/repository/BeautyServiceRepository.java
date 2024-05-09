@@ -12,5 +12,7 @@ public interface BeautyServiceRepository extends CrudRepository<BeautyService, L
 	Stream<BeautyService> findBySaloonId(Long saloonId);
 	
 	Optional<BeautyService> findByIdAndSaloonId(Long id,Long saloonId);
+	
+	Optional<BeautyService> findByServiceNameAndSaloonId(String serviceName,Long saloonId);
 
 }

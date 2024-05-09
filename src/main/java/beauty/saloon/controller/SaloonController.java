@@ -24,68 +24,51 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SaloonController {
 	private final SaloonService saloonService;
-	
+
 	@PostMapping("/register")
 	ResponseEntity<SaloonResponseDto> register(@RequestBody SaloonRegisterDto saloonRegisterDto) {
-		SaloonResponseDto response = new SaloonResponseDto();
-		try {
-			response = saloonService.addSaloon(saloonRegisterDto);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+		SaloonResponseDto response = saloonService.addSaloon(saloonRegisterDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
+	
+
 	@GetMapping("/email/{email}")
-	ResponseEntity<SaloonResponseDto> getSaloonByEmail(@PathVariable("email") String email){
-		SaloonResponseDto response = new SaloonResponseDto();
-		try {
-			response = saloonService.getSaloonByEmail(email);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+	ResponseEntity<SaloonResponseDto> getSaloonByEmail(@PathVariable("email") String email) {
+		SaloonResponseDto response = saloonService.getSaloonByEmail(email);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
+	
+
 	@GetMapping("/id/{id}")
-	ResponseEntity<SaloonResponseDto> getSaloonById(@PathVariable("id") Long id){
-		SaloonResponseDto response = new SaloonResponseDto();
-		try {
-			response = saloonService.getSaloonById(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+	ResponseEntity<SaloonResponseDto> getSaloonById(@PathVariable("id") Long id) {
+		SaloonResponseDto response = saloonService.getSaloonById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
+	
+
 	@PutMapping("/email/{email}")
-	ResponseEntity<SaloonResponseDto> updateSaloon(
-			@PathVariable("email") String email,
+	ResponseEntity<SaloonResponseDto> updateSaloon(@PathVariable("email") String email,
 			@RequestBody SaloonEditDto saloonEditDto) {
-		SaloonResponseDto response = new SaloonResponseDto();
-		try {
-			response = saloonService.editSaloon(email,saloonEditDto);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		SaloonResponseDto response = saloonService.editSaloon(email, saloonEditDto);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
+	
+
 	@DeleteMapping("/id/{id}")
 	ResponseEntity<SaloonResponseDto> removeSaloon(@PathVariable("id") Long id) {
-		SaloonResponseDto response = new SaloonResponseDto();
-		try {
-			response = saloonService.removeSaloon(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		SaloonResponseDto response = saloonService.removeSaloon(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	
+
 	@GetMapping()
-	ResponseEntity<List<SaloonResponseDto>> getSaloons(){
+	ResponseEntity<List<SaloonResponseDto>> getSaloons() {
 		return ResponseEntity.status(HttpStatus.OK).body(saloonService.getSaloons());
 	}
-	
+
 }

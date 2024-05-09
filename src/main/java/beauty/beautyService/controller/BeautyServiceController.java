@@ -28,66 +28,38 @@ public class BeautyServiceController {
 	@PostMapping("/register/saloon_id/{saloonId}")
 	ResponseEntity<BeautyServiceResponseDto> addService(@PathVariable("saloonId") Long saloonId,
 			@RequestBody BeautyServiceAddEditDto beautyServiceEditDto) {
-		BeautyServiceResponseDto response = new BeautyServiceResponseDto();
-		try {
-			response = beautyServiceService.addService(saloonId, beautyServiceEditDto);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		BeautyServiceResponseDto response = beautyServiceService.addService(saloonId, beautyServiceEditDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@GetMapping("/id/{id}")
 	ResponseEntity<BeautyServiceResponseDto> getService(@PathVariable("id") Long id) {
-		BeautyServiceResponseDto response = new BeautyServiceResponseDto();
-		try {
-			response = beautyServiceService.getService(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		BeautyServiceResponseDto response = beautyServiceService.getService(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
-	
 
 	@PutMapping("/id/{id}")
 	ResponseEntity<BeautyServiceResponseDto> updateService(@PathVariable("id") Long id,
 			@RequestBody BeautyServiceAddEditDto beautyServiceEditDto) {
-		BeautyServiceResponseDto response = new BeautyServiceResponseDto();
-		try {
-			response = beautyServiceService.editService(id, beautyServiceEditDto);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		BeautyServiceResponseDto response = beautyServiceService.editService(id, beautyServiceEditDto);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@DeleteMapping("/id/{id}")
 	ResponseEntity<BeautyServiceResponseDto> removeService(@PathVariable("id") Long id) {
-		BeautyServiceResponseDto response = new BeautyServiceResponseDto();
-		try {
-			response = beautyServiceService.removeService(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		BeautyServiceResponseDto response = beautyServiceService.removeService(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@GetMapping("/saloon_id/{saloonId}")
-	ResponseEntity<List<BeautyServiceResponseDto>> getSaloonServices(@PathVariable("saloonId") Long saloonId){
+	ResponseEntity<List<BeautyServiceResponseDto>> getSaloonServices(@PathVariable("saloonId") Long saloonId) {
 		return ResponseEntity.status(HttpStatus.OK).body(beautyServiceService.getSaloonServices(saloonId));
 	}
-	
+
 	@GetMapping("id/{id}/saloon_id/{saloonId}")
-	ResponseEntity<BeautyServiceResponseDto> getSaloonService(@PathVariable("saloonId") Long saloonId, @PathVariable("id") Long id){
-		BeautyServiceResponseDto response = new BeautyServiceResponseDto();
-		try {
-			response = beautyServiceService.getSaloonService(saloonId, id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+	ResponseEntity<BeautyServiceResponseDto> getSaloonService(@PathVariable("saloonId") Long saloonId,
+			@PathVariable("id") Long id) {
+		BeautyServiceResponseDto response = beautyServiceService.getSaloonService(saloonId, id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 

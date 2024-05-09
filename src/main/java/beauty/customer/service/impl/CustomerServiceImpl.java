@@ -18,33 +18,34 @@ import beauty.models.Status;
 import beauty.role.repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-	
+
 	private final CustomerRepository customerRepository;
 	private final RoleRepository roleRepository;
 	private final ModelMapper modelMapper;
 
 	@Override
 	public CustomerResponseDto addCustomer(CustomerRegisterDto customerRegisterDto) {
+		if (customerRegisterDto.getEmail() == "" || customerRegisterDto.getFirstName() == ""
+				|| customerRegisterDto.getLastName() == "" || customerRegisterDto.getPassword() == "") {
+			throw new IllegalArgumentException();
+		}
 		if (customerRepository.existsByEmail(customerRegisterDto.getEmail())) {
 			throw new UserAlreadyExistException(customerRegisterDto.getEmail());
 		}
-		
-		if (customerRegisterDto.getFirstName() =="" || customerRegisterDto.getLastName() == ""
-				|| customerRegisterDto.getPassword() == "") {
-			throw new IllegalArgumentException();
-		}	
+
 		Customer customer = modelMapper.map(customerRegisterDto, Customer.class);
 		customer.setStatus(Status.ACTIVE);
-		
+
 		Role customerRole = roleRepository.findByName("ROLE_USER").orElseThrow(EntityNotFoundException::new);
 		List<Role> userRoles = new ArrayList<>();
-        userRoles.add(customerRole);
+		userRoles.add(customerRole);
 		customer.setRoles(userRoles);
-        
+
 		customerRepository.save(customer);
 		return modelMapper.map(customer, CustomerResponseDto.class);
 	}
@@ -67,13 +68,13 @@ public class CustomerServiceImpl implements CustomerService {
 		String firstName = customerEditDto.getFirstName().trim();
 		String lastName = customerEditDto.getLastName().trim();
 		if (firstName == "" || lastName == "") {
-			throw new RuntimeException();
+			throw new IllegalArgumentException();
 		}
 		customer.setFirstName(firstName);
-		customer.setLastName(lastName);		
+		customer.setLastName(lastName);
 		customerRepository.save(customer);
 		return modelMapper.map(customer, CustomerResponseDto.class);
-		
+
 	}
 
 	@Override

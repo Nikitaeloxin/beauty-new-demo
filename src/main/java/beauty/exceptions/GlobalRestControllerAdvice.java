@@ -12,12 +12,22 @@ public class GlobalRestControllerAdvice {
 	
 	@ExceptionHandler(EntityNotFoundException.class)
 	ResponseEntity<Void> handleEntityNotFoundException(EntityNotFoundException e){
-		return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
 	@ExceptionHandler(UserAlreadyExistException.class)
 	ResponseEntity<Void> handleUserAlreadyExistException(UserAlreadyExistException e){
 		return ResponseEntity.status(HttpStatus.CONFLICT).build();
+	}
+	
+	@ExceptionHandler(ServiceAlreadyExistException.class)
+	ResponseEntity<Void> handleServiceAlreadyExistException(ServiceAlreadyExistException e){
+		return ResponseEntity.status(HttpStatus.CONFLICT).build();
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	ResponseEntity<Void> handleIllegalArgumentException(IllegalArgumentException e){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 }

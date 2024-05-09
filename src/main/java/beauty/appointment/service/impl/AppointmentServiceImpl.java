@@ -19,6 +19,7 @@ import beauty.models.Customer;
 import beauty.models.Saloon;
 import beauty.models.Status;
 import beauty.saloon.repository.SaloonRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,10 +36,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 		if (addAppointmentDto.getTime() == null) {
 			throw new IllegalArgumentException();
 		}
-		Saloon saloon = saloonRepository.findById(addAppointmentDto.getSaloonId()).orElseThrow(IllegalArgumentException::new);
-		Customer customer = customerRepository.findById(addAppointmentDto.getCustomerId()).orElseThrow(IllegalArgumentException::new);
+		Saloon saloon = saloonRepository.findById(addAppointmentDto.getSaloonId()).orElseThrow(EntityNotFoundException::new);
+		Customer customer = customerRepository.findById(addAppointmentDto.getCustomerId()).orElseThrow(EntityNotFoundException::new);
 		BeautyService service = beautyServiceRepository.findByIdAndSaloonId(addAppointmentDto.getServiceId(),addAppointmentDto.getSaloonId())
-				.orElseThrow(IllegalArgumentException::new);
+				.orElseThrow(EntityNotFoundException::new);
 		Appointment appointment = modelMapper.map(addAppointmentDto, Appointment.class);
 		appointment.setSaloon(saloon);
 		appointment.setCustomer(customer);
@@ -50,13 +51,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public AppointmentResponseDto getAppointment(Long appointmentId) {
-		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(IllegalArgumentException::new);
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
 		return modelMapper.map(appointment, AppointmentResponseDto.class);
 	}
 
 	@Override
 	public AppointmentResponseDto editAppointment(Long appointmentId, LocalDateTime time) {
-		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(IllegalArgumentException::new);
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
 		appointment.setTime(time);
 		appointmentRepository.save(appointment);
 		return modelMapper.map(appointment, AppointmentResponseDto.class);
@@ -64,7 +65,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public AppointmentResponseDto removeAppointment(Long appointmentId) {
-		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(IllegalArgumentException::new);
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
 		appointmentRepository.delete(appointment);
 		return modelMapper.map(appointment, AppointmentResponseDto.class);
 	}

@@ -25,59 +25,40 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AppointmentController {
 	private final AppointmentService appointmentService;
-	
+
 	@PostMapping("/register")
 	ResponseEntity<AppointmentResponseDto> addService(@RequestBody AddAppointmentDto addAppointmentDto) {
-		AppointmentResponseDto response = new AppointmentResponseDto();
-		try {
-			response = appointmentService.addAppointment(addAppointmentDto);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
+		AppointmentResponseDto response = appointmentService.addAppointment(addAppointmentDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
-	
+
 	@GetMapping("/id/{id}")
 	ResponseEntity<AppointmentResponseDto> getAppointment(@PathVariable("id") Long id) {
 		AppointmentResponseDto response = new AppointmentResponseDto();
-		try {
-			response = appointmentService.getAppointment(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@PutMapping("/id/{id}")
 	ResponseEntity<AppointmentResponseDto> updateAppointment(@PathVariable("id") Long id,
 			@RequestParam("time") LocalDateTime time) {
-		AppointmentResponseDto response = new AppointmentResponseDto();
-		try {
-			response = appointmentService.editAppointment(id, time);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		AppointmentResponseDto response = appointmentService.editAppointment(id, time);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@DeleteMapping("/id/{id}")
-	ResponseEntity<AppointmentResponseDto> removeAppointment(@PathVariable("id") Long id){
-		AppointmentResponseDto response = new AppointmentResponseDto();
-		try {
-			response = appointmentService.removeAppointment(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+	ResponseEntity<AppointmentResponseDto> removeAppointment(@PathVariable("id") Long id) {
+		AppointmentResponseDto response = appointmentService.removeAppointment(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@GetMapping("/customer_id/{customerId}")
-	ResponseEntity<List<AppointmentResponseDto>> getAllCustomerAppointments(@PathVariable("customerId") Long customerId){
+	ResponseEntity<List<AppointmentResponseDto>> getAllCustomerAppointments(
+			@PathVariable("customerId") Long customerId) {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAllCustomerAppointments(customerId));
 	}
-	
+
 	@GetMapping("/saloon_id/{saloonId}")
-	ResponseEntity<List<AppointmentResponseDto>> getAllSaloonAppointments(@PathVariable("saloonId") Long saloonId){
+	ResponseEntity<List<AppointmentResponseDto>> getAllSaloonAppointments(@PathVariable("saloonId") Long saloonId) {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAllSaloonAppointments(saloonId));
 	}
 

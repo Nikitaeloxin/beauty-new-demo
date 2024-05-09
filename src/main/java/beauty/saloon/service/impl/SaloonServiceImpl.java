@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import beauty.customer.dto.CustomerResponseDto;
+import beauty.exceptions.UserAlreadyExistException;
 import beauty.models.Customer;
 import beauty.models.Role;
 import beauty.models.Saloon;
@@ -18,6 +19,7 @@ import beauty.saloon.dto.SaloonRegisterDto;
 import beauty.saloon.dto.SaloonResponseDto;
 import beauty.saloon.repository.SaloonRepository;
 import beauty.saloon.service.SaloonService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,15 +33,15 @@ public class SaloonServiceImpl implements SaloonService {
 	@Override
 	public SaloonResponseDto addSaloon(SaloonRegisterDto saloonRegisterDto) {
 		if (saloonRepository.existsByEmail(saloonRegisterDto.getEmail())) {
-			throw new RuntimeException();
+			throw new UserAlreadyExistException(saloonRegisterDto.getEmail());
 		}
-		if (saloonRegisterDto.getEmail() == null || saloonRegisterDto.getAddress() == null
-				|| saloonRegisterDto.getPassword() == null || saloonRegisterDto.getSaloonName() == null) {
-			throw new RuntimeException();
+		if (saloonRegisterDto.getEmail() == "" || saloonRegisterDto.getAddress() == ""
+				|| saloonRegisterDto.getPassword() == "" || saloonRegisterDto.getSaloonName() == "") {
+			throw new IllegalArgumentException();
 		}
 		Saloon saloon = modelMapper.map(saloonRegisterDto, Saloon.class);
 		saloon.setStatus(Status.ACTIVE);
-		Role saloonRole = roleRepository.findByName("ROLE_USER").orElseThrow(RuntimeException::new);
+		Role saloonRole = roleRepository.findByName("ROLE_USER").orElseThrow(EntityNotFoundException::new);
 		List<Role> userRoles = new ArrayList<>();
         userRoles.add(saloonRole);
         saloon.setRoles(userRoles);
@@ -50,23 +52,23 @@ public class SaloonServiceImpl implements SaloonService {
 
 	@Override
 	public SaloonResponseDto getSaloonByEmail(String email) {
-		Saloon saloon = saloonRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+		Saloon saloon = saloonRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
 		return modelMapper.map(saloon, SaloonResponseDto.class);
 	}
 
 	@Override
 	public SaloonResponseDto getSaloonById(long id) {
-		Saloon saloon = saloonRepository.findById(id).orElseThrow(RuntimeException::new);
+		Saloon saloon = saloonRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 		return modelMapper.map(saloon, SaloonResponseDto.class);
 	}
 
 	@Override
 	public SaloonResponseDto editSaloon(String email, SaloonEditDto saloonEditDto) {
-		Saloon saloon = saloonRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+		Saloon saloon = saloonRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
 		String saloonName = saloonEditDto.getSaloonName().trim();
 		String address = saloonEditDto.getAddress().trim();
-		if (saloonName == null || address == null) {
-			throw new RuntimeException();
+		if (saloonName == "" || address == "") {
+			throw new IllegalArgumentException();
 		}
 		saloon.setSaloonName(saloonName);
 		saloon.setAddress(address);		
@@ -76,7 +78,7 @@ public class SaloonServiceImpl implements SaloonService {
 
 	@Override
 	public SaloonResponseDto removeSaloon(long id) {
-		Saloon saloon = saloonRepository.findById(id).orElseThrow(RuntimeException::new);
+		Saloon saloon = saloonRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 		saloonRepository.delete(saloon);
 		return modelMapper.map(saloon, SaloonResponseDto.class);
 	}

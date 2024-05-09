@@ -26,63 +26,32 @@ public class CustomerController {
 
 	@PostMapping("/register")
 	ResponseEntity<CustomerResponseDto> register(@RequestBody CustomerRegisterDto customerRegisterDto) {
-//		CustomerResponseDto response = new CustomerResponseDto();
-//		try {
-//			response = customerService.addCustomer(customerRegisterDto);
-//		} catch (RuntimeException e) {
-//			e.printStackTrace();
-//			return 	ResponseEntity.status(HttpStatus.CONFLICT).build();
-//		}
-//		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		CustomerResponseDto response = customerService.addCustomer(customerRegisterDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
-	
+
 	@GetMapping("/email/{email}")
-	ResponseEntity<CustomerResponseDto> getCustomerByEmail(@PathVariable("email") String email){
-//		CustomerResponseDto response = new CustomerResponseDto();
-//		try {
-//			response = customerService.getCustomerByEmail(email);
-//		} catch (RuntimeException e) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//		}
-//		return ResponseEntity.status(HttpStatus.OK).body(response);
+	ResponseEntity<CustomerResponseDto> getCustomerByEmail(@PathVariable("email") String email) {
 		CustomerResponseDto response = customerService.getCustomerByEmail(email);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@GetMapping("/id/{id}")
-	ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable("id") Long id){
-		CustomerResponseDto response = new CustomerResponseDto();
-		try {
-			response = customerService.getCustomerById(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+	ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable("id") Long id) {
+		CustomerResponseDto response = customerService.getCustomerById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@PutMapping("/email/{email}")
-	ResponseEntity<CustomerResponseDto> updateCustomer(
-			@PathVariable("email") String email,
+	ResponseEntity<CustomerResponseDto> updateCustomer(@PathVariable("email") String email,
 			@RequestBody CustomerEditDto customerEditDto) {
-		CustomerResponseDto response = new CustomerResponseDto();
-		try {
-			response = customerService.editCustomer(email,customerEditDto);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		CustomerResponseDto response = customerService.editCustomer(email, customerEditDto);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@DeleteMapping("/id/{id}")
 	ResponseEntity<CustomerResponseDto> removeCustomer(@PathVariable("id") Long id) {
-		CustomerResponseDto response = new CustomerResponseDto();
-		try {
-			response = customerService.removeCustomer(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+		CustomerResponseDto response = customerService.removeCustomer(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
