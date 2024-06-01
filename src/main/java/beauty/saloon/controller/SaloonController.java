@@ -2,8 +2,11 @@ package beauty.saloon.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import beauty.saloon.dto.SaloonResponseDto;
 import beauty.saloon.service.SaloonService;
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/saloons")
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +30,8 @@ public class SaloonController {
 	private final SaloonService saloonService;
 
 	@PostMapping("/register")
-	ResponseEntity<SaloonResponseDto> register(@RequestBody SaloonRegisterDto saloonRegisterDto) {
+	ResponseEntity<SaloonResponseDto> register(@Valid @RequestBody SaloonRegisterDto saloonRegisterDto)
+	throws MethodArgumentNotValidException {
 		SaloonResponseDto response = saloonService.addSaloon(saloonRegisterDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
@@ -51,7 +56,8 @@ public class SaloonController {
 
 	@PutMapping("/email/{email}")
 	ResponseEntity<SaloonResponseDto> updateSaloon(@PathVariable("email") String email,
-			@RequestBody SaloonEditDto saloonEditDto) {
+			@Valid @RequestBody SaloonEditDto saloonEditDto)
+	throws MethodArgumentNotValidException {
 		SaloonResponseDto response = saloonService.editSaloon(email, saloonEditDto);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}

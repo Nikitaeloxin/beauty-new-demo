@@ -33,9 +33,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public AppointmentResponseDto addAppointment(AddAppointmentDto addAppointmentDto) {
-		if (addAppointmentDto.getTime() == null) {
-			throw new IllegalArgumentException();
-		}
 		Saloon saloon = saloonRepository.findById(addAppointmentDto.getSaloonId()).orElseThrow(EntityNotFoundException::new);
 		Customer customer = customerRepository.findById(addAppointmentDto.getCustomerId()).orElseThrow(EntityNotFoundException::new);
 		BeautyService service = beautyServiceRepository.findByIdAndSaloonId(addAppointmentDto.getServiceId(),addAppointmentDto.getSaloonId())

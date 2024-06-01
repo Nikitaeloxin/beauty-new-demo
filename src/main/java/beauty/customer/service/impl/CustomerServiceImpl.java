@@ -30,10 +30,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerResponseDto addCustomer(CustomerRegisterDto customerRegisterDto) {
-		if (customerRegisterDto.getEmail() == "" || customerRegisterDto.getFirstName() == ""
-				|| customerRegisterDto.getLastName() == "" || customerRegisterDto.getPassword() == "") {
-			throw new IllegalArgumentException();
-		}
 		if (customerRepository.existsByEmail(customerRegisterDto.getEmail())) {
 			throw new UserAlreadyExistException(customerRegisterDto.getEmail());
 		}
@@ -65,13 +61,8 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerResponseDto editCustomer(String email, CustomerEditDto customerEditDto) {
 		Customer customer = customerRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
-		String firstName = customerEditDto.getFirstName().trim();
-		String lastName = customerEditDto.getLastName().trim();
-		if (firstName == "" || lastName == "") {
-			throw new IllegalArgumentException();
-		}
-		customer.setFirstName(firstName);
-		customer.setLastName(lastName);
+		customer.setFirstName(customerEditDto.getFirstName());
+		customer.setLastName(customerEditDto.getLastName());
 		customerRepository.save(customer);
 		return modelMapper.map(customer, CustomerResponseDto.class);
 

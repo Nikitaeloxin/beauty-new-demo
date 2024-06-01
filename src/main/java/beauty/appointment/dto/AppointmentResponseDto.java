@@ -13,7 +13,7 @@ import lombok.Data;
 public class AppointmentResponseDto {
 	Long id;
 	SaloonResponseDto saloon;
-	BeautyServiceResponseDto saloonService;
+	BeautyServiceResponseDto service;
 	CustomerResponseDto customer;
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	LocalDateTime time;

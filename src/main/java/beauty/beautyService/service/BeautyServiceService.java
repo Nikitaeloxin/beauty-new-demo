@@ -18,5 +18,7 @@ public interface BeautyServiceService {
 	List<BeautyServiceResponseDto> getSaloonServices(Long saloonId);
 
 	BeautyServiceResponseDto getSaloonService(Long saloonId, Long serviceId);
+	
+	List<BeautyServiceResponseDto> getAllServices();
 
 }
