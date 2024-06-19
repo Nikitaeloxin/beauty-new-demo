@@ -19,6 +19,8 @@ public class Appointment extends BaseEntity {
 	@Column(name = "time")
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	LocalDateTime time;
+
+	String description;
 	
 	@ManyToOne
 	@JoinColumn(name = "saloon_id")
